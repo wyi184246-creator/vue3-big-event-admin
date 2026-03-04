@@ -1,0 +1,33 @@
+app:
+  env: dev
+
+mysql:
+  host: 127.0.0.1
+  port: 3308
+  username: root
+  password: asd456
+
+redis:
+  host: 127.0.0.1
+  port: 6379
+  username: root
+  password: asd456
+  db: 0
+
+logger:
+  dir: logs
+  info_filename: app.log
+  error_filename: error.log
+  time_key: time
+  level_key: level
+  message_key: msg
+  caller_key: caller
+  max_size: 100
+  max_backups: 15
+  max_age: 30
+  compress: true
+  local_time: true
+  development:
+    level: debug
+  production:
+    level: info
