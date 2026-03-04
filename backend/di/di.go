@@ -1,12 +1,26 @@
 package di
 
-import "go.uber.org/fx"
+import (
+	"backend/api"
+	"backend/dao"
+	"backend/service"
 
-var controllerModule = fx.Module("controller", fx.Provide())
+	"go.uber.org/fx"
+)
 
-var serviceModule = fx.Module("service", fx.Provide())
+var controllerModule = fx.Module("controller", fx.Provide(
+	fx.Annotate(api.NewUserController, fx.As(new(api.UserControllerInterface))),
+))
 
-var daoModule = fx.Module("dao", fx.Provide())
+var serviceModule = fx.Module("service", fx.Provide(
+	service.NewUserService,
+	fx.Annotate(service.NewUserService, fx.As(new(service.UserServiceInterface))),
+))
+
+var daoModule = fx.Module("dao", fx.Provide(
+	dao.NewGormDB,
+	fx.Annotate(dao.NewUserDao, fx.As(new(dao.UserDaoInterface))),
+))
 
 var provideConfig = fx.Options(
 	controllerModule,
