@@ -8,11 +8,8 @@ import (
 )
 
 func TestLogger(t *testing.T) {
-	load, err := config.Load(config.RootPath + "config/configs.yml")
-	if err != nil {
-		t.Fatal(err)
-	}
-	_, err = InitLogger(load.Logger, "dev")
+	load := config.GetConfig()
+	_, err := InitLogger(load.Logger, "dev")
 	if err != nil {
 		t.Fatal(err)
 	}

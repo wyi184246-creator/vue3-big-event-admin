@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
-	cfg, err := config.Load("config/configs.yml")
-	if err != nil {
-		panic(fmt.Errorf("load config failed: %w", err))
-	}
+	Init()
+}
 
+func Init() {
+	cfg := config.GetConfig()
 	appLogger, err := loggerpkg.InitLogger(cfg.Logger, cfg.App.Env)
 	if err != nil {
 		panic(fmt.Errorf("init logger failed: %w", err))

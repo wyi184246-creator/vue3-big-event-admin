@@ -5,6 +5,7 @@ import (
 	"path"
 	"runtime"
 	"strings"
+	"sync"
 
 	"github.com/spf13/viper"
 )
@@ -64,31 +65,38 @@ type AppConfig struct {
 	Logger LoggerConfig `mapstructure:"logger"`
 }
 
-func Load(path string) (*AppConfig, error) {
-	if strings.TrimSpace(path) == "" {
-		path = "config/configs.yml"
-	}
+var GlobalConfig *AppConfig
+var gonce = sync.Once{}
 
-	v := viper.New()
-	v.SetConfigFile(path)
-	v.SetConfigType("yaml")
-	setDefaults(v)
+func GetConfig() *AppConfig {
+	path := RootPath + "config/configs.yml"
+	gonce.Do(func() {
+		if strings.TrimSpace(path) == "" {
+			path = "config/configs.yml"
+		}
 
-	if err := v.ReadInConfig(); err != nil {
-		return nil, fmt.Errorf("read config failed: %w", err)
-	}
+		v := viper.New()
+		v.SetConfigFile(path)
+		v.SetConfigType("yaml")
+		setDefaults(v)
 
-	var cfg AppConfig
-	if err := v.Unmarshal(&cfg); err != nil {
-		return nil, fmt.Errorf("unmarshal config failed: %w", err)
-	}
+		if err := v.ReadInConfig(); err != nil {
+			panic(err)
+		}
 
-	normalizeConfig(&cfg)
-	if err := validateConfig(cfg); err != nil {
-		return nil, err
-	}
+		var cfg AppConfig
+		if err := v.Unmarshal(&cfg); err != nil {
+			panic(err)
+		}
 
-	return &cfg, nil
+		normalizeConfig(&cfg)
+		if err := validateConfig(cfg); err != nil {
+			panic(err)
+		}
+		GlobalConfig = &cfg
+	})
+
+	return GlobalConfig
 }
 
 func setDefaults(v *viper.Viper) {
