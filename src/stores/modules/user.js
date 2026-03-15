@@ -15,10 +15,6 @@ export const useUserStore = defineStore(
     const getUser = async () => {
       const res = await userGetProfileService()
       user.value = res.data.data
-      user.value.user_pic = new URL(
-        '@/assets/free_stock_photo.jpg',
-        import.meta.url
-      ).href
     }
     const setUser = (newUser) => {
       user.value = newUser

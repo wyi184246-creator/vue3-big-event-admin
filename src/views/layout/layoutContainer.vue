@@ -82,7 +82,9 @@ const handleCommand = (command) => {
     </el-aside>
     <el-container>
       <el-header>
-        <div>程序员：<strong>吴云飞</strong></div>
+        <div>
+          程序员：<strong>{{ userStore.user.nickname }}</strong>
+        </div>
         <el-dropdown placement="bottom-end" @command="handleCommand">
           <span class="el-dropdown__box">
             <el-avatar :src="userStore.user.user_pic" />
