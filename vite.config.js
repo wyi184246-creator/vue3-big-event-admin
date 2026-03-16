@@ -19,7 +19,7 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()]
     })
   ],
-  base: '/big-event-vue-admin/',
+  base: '/vue3-big-event-admin/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
